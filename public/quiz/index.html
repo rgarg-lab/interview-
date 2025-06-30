@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>Interview</title>
+   <link rel="stylesheet" href="styles.css">
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="page2" style="display: block;">
+    <div class="input-container">
+    
+    <input type="text" id="text" placeholder="Coding Language ">
+    <button id="startQuizBtn" onclick="dosomething()"> start quiz</button>
+    </div>
+    
+    </div>
+    <section class="questions" id="page3" style="display: none;">
+    <div id="q1" style ="display: none;">
+        <h2 id="ques1">q1</h2>
+        <div class="q_1">
+            <button id="q1o1" onclick="q1s1()">o1</button>
+            <button id="q1o2" onclick="q1s2()">o1</button>
+            <button id="q1o3" onclick="q1s3()">o1</button>
+            <button id="q1o4" onclick="q1s4()">o1</button>
+        </div>   
+        <div class="next-fixed">
+            <button onclick="q2_func()">Next</button>
+        </div>     
+    </div>
+    <div id="q2" style ="display: none;">
+        <h2 id="ques2">q1</h2>
+        <div class="q_2">
+            <button id="q2o1" onclick="q2s1()"> o1</button>
+            <button id="q2o2"onclick="q2s2()">o1</button>
+            <button id="q2o3"onclick="q2s3()">o1</button>
+            <button id="q2o4"onclick="q2s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q1_func()">Prev</button>
+            <button onclick="q3_func()">Next</button>
+        </div>         
+    </div>
+    <div id="q3" style ="display: none;">
+        <h2 id="ques3">q1</h2>
+        <div class="q_3">
+            <button id="q3o1"onclick="q3s1()">o1</button>
+            <button id="q3o2"onclick="q3s2()">o1</button>
+            <button id="q3o3"onclick="q3s3()">o1</button>
+            <button id="q3o4"onclick="q3s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q2_func()">Prev</button>
+            <button onclick="q4_func()">Next</button>
+        </div>         
+    </div>    
+    <div id="q4" style ="display: none;">
+        <h2 id="ques4">q1</h2>
+        <div class="q_4">
+            <button id="q4o1"onclick="q4s1()">o1</button>
+            <button id="q4o2"onclick="q4s2()">o1</button>
+            <button id="q4o3"onclick="q4s3()">o1</button>
+            <button id="q4o4"onclick="q4s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q3_func()">Prev</button>
+            <button onclick="q5_func()">Next</button>
+        </div>         
+    </div>
+        
+    <div id="q5" style ="display: none;">
+        <h2 id="ques5">q1</h2>
+        <div class="q_5">
+            <button id="q5o1"onclick="q5s1()">o1</button>
+            <button id="q5o2"onclick="q5s2()">o1</button>
+            <button id="q5o3"onclick="q5s3()">o1</button>
+            <button id="q5o4"onclick="q5s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q4_func()">Prev</button>
+            <button onclick="q6_func()">Next</button>
+        </div>         
+    </div>
+        
+    <div id="q6" style ="display: none;">
+        <h2 id="ques6">q1</h2>
+        <div class="q_6">
+            <button id="q6o1"onclick="q6s1()">o1</button>
+            <button id="q6o2"onclick="q6s2()">o1</button>
+            <button id="q6o3"onclick="q6s3()">o1</button>
+            <button id="q6o4"onclick="q6s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q5_func()">Prev</button>
+            <button onclick="q7_func()">Next</button>
+        </div>         
+    </div>
+        
+    <div id="q7" style ="display: none;">
+        <h2 id="ques7">q1</h2>
+        <div class="q_7">
+            <button id="q7o1"onclick="q7s1()">o1</button>
+            <button id="q7o2"onclick="q7s2()">o1</button>
+            <button id="q7o3"onclick="q7s3()">o1</button>
+            <button id="q7o4"onclick="q7s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q6_func()">Prev</button>
+            <button onclick="q8_func()">Next</button>
+        </div>         
+    </div>
+        
+    <div id="q8" style ="display: none;">
+        <h2 id="ques8">q1</h2>
+        <div class="q_8">
+            <button id="q8o1"onclick="q8s1()">o1</button>
+            <button id="q8o2"onclick="q8s2()">o1</button>
+            <button id="q8o3"onclick="q8s3()">o1</button>
+            <button id="q8o4"onclick="q8s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q7_func()">Prev</button>
+            <button onclick="q9_func()">Next</button>
+        </div>         
+    </div>
+        
+    <div id="q9" style ="display: none;">
+        <h2 id="ques9">q1</h2>
+        <div class="q_9">
+            <button id="q9o1"onclick="q9s1()">o1</button>
+            <button id="q9o2"onclick="q9s2()">o1</button>
+            <button id="q9o3"onclick="q9s3()">o1</button>
+            <button id="q9o4"onclick="q9s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q8_func()">Prev</button>
+            <button onclick="q10_func()">Next</button>
+        </div>         
+    </div>
+    <div id="q10" style ="display: none;">
+        <h2 id="ques10">q1</h2>
+        <div class="q_10">
+            <button id="q10o1"onclick="q10s1()">o1</button>
+            <button id="q10o2"onclick="q10s2()">o1</button>
+            <button id="q10o3"onclick="q10s3()">o1</button>
+            <button id="q10o4"onclick="q10s4()">o1</button>
+        </div>
+        <div class="next-fixed">
+            <button onclick="q9_func()">Prev</button>
+            <button onclick="submitQuiz()">Submit</button>
+        </div>         
+    </div>
+    <div id="chartPage" style="display: none;">
+        <canvas id="resultChart" width="300" height="300"></canvas>
+    </div>
+
+    </section>
+<script src="script.js"></script>
+<script src="option.js"></script>
+<script src="result.js"></script>
+<script src="question.js"></script>
+</body>
+</html>

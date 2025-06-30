@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Audio Transcription</title>
+  <link rel="stylesheet" href="audio_styles.css">
+</head>
+<body>
+ <body>
+  <div id="audio_page1">
+    <h1>🎤 Welcome to the Voice Interview</h1>
+    <input type="text" id="audio_topic" placeholder="Enter your topic">
+    <button onclick="audio_page()">Next</button>
+  </div>
+
+  <!-- Q1 -->
+<div id="audio_question1" style="display: none;" class="question-section">
+  <h2 id="audio_q1">Question 1 here</h2>
+
+  <button id="startBtn1" onclick="startrecording(0)">Start</button>
+  <button id="stopBtn1" onclick="stoprecording()">Stop</button>
+  <audio id="audio1" controls></audio>
+  <p id="statusMsg1" class="status-msg"></p>
+  <button id="nextBtn1" onclick="goToNext(1)">Next</button>
+</div>
+
+<!-- Q2 -->
+<div id="audio_question2" style="display: none;" class="question-section">
+  <h2 id="audio_q2">Question 2 here</h2>
+
+  <button id="startBtn2" onclick="startrecording(1)">Start</button>
+  <button id="stopBtn2" onclick="stoprecording()">Stop</button>
+  <audio id="audio2" controls></audio>
+  <p id="statusMsg2" class="status-msg"></p>
+  <button id="nextBtn2" onclick="goToNext(2)">Next</button>
+</div>
+
+<!-- Q3 -->
+<div id="audio_question3" style="display: none;" class="question-section">
+  <h2 id="audio_q3">Question 3 here</h2>
+
+  <button id="startBtn3" onclick="startrecording(2)">Start</button>
+  <button id="stopBtn3" onclick="stoprecording()">Stop</button>
+  <audio id="audio3" controls></audio>
+  <p id="statusMsg3" class="status-msg"></p>
+  <button id="nextBtn3" onclick="showSummary()">Submit</button>
+</div>
+<div id="audio_result">
+  
+</div>
+
+
+  <script src="audio_script.js"></script>
+  <script src="audio_analyse.js"></script>
+  <script src="audio_question_display.js"></script>
+</body>
+</html>
