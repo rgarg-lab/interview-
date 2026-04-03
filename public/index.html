@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mock Interview</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --card-color: #ffffff;
+      --card-title-color: #333;
+      --card-desc-color: #666;
+      --sidebar-bg: #1e1e4f;
+  --sidebar-text: #ffffff;
+  --sidebar-hover: #2b3b8e;
+    }
+
+    [data-theme="white"] {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --card-color: #ffffff;
+      --card-title-color: #333;
+      --card-desc-color: #666;
+       --sidebar-bg: #f8f8f8;
+  --sidebar-text: #000000;
+  --sidebar-hover: #dddddd;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --card-color: #1f1f1f;
+      --card-title-color: #ffffff;
+      --card-desc-color: #bbbbbb;
+        --sidebar-bg: #2a2a2a;
+  --sidebar-text: #ffffff;
+  --sidebar-hover: #333333;
+    }
+
+    [data-theme="blue"] {
+      --bg-color: linear-gradient(to right, #1e1e4f, #2b3b8e);
+      --text-color: #ffffff;
+      --card-color: #2b3b8e;
+      --card-title-color: #ffffff;
+      --card-desc-color: #ddddff;
+       --sidebar-bg: #1e1e4f;
+  --sidebar-text: #ffffff;
+  --sidebar-hover: #2b3b8e;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 40px;
+    }
+
+    .card-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      width: 300px;
+      background-color: var(--card-color);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, background-color 0.4s ease;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 16px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--card-title-color);
+      margin-bottom: 10px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--card-desc-color);
+      line-height: 1.4;
+    }
+
+    .theme-switcher {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 999;
+    }
+
+    .theme-switcher select {
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 6px;
+    }  
+ #logo-wrapper {
+  position: fixed; /* or absolute if you prefer */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+}
+
+#logo {
+  width: 90px;
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+
+#logo:hover {
+  transform: scale(1.05);
+}
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #1e1e4f;
+  color: #ffffff;
+  min-height: 100vh;
+  padding-top: 30px;
+  position: fixed;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  top: 0;
+  left: 0;
+  z-index: 100;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+   border-right: 1px solid rgba(255, 255, 255, 0.1); /* subtle border */
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.sidebar-logo {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 95px; /* ✅ More space after logo */
+}
+
+.sidebar-menu {
+  list-style-type: none;
+  
+  padding-left: 0;
+  margin-top: 20px;
+}
+
+.sidebar-menu li {
+  padding: 12px 20px;
+   color: var(--sidebar-text);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 10px;
+}
+
+.sidebar-menu li:hover {
+  background-color: var(--sidebar-hover);
+   
+}
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar.collapsed .sidebar-logo,
+.sidebar.collapsed .sidebar-menu li {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.sidebar.collapsed .sidebar-menu li::before {
+  margin-right: 0;
+}
+
+.sidebar.collapsed .sidebar-menu li span {
+  display: none;
+}
+.toggle-btn:hover {
+  background-color: var(--sidebar-hover);
+  color: var(--sidebar-text); /* optional: keep text color consistent */
+  transform: scale(1.05);
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 85px; /* Move below logo */
+  
+  background-color: var(--sidebar-bg);
+  border: none;
+  color: var(--sidebar-text);
+  font-size: 20px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 0 5px 5px 0;
+  z-index: 1001;
+  transition: left 0.3s ease;
+}
+
+.sidebar.collapsed + .main-content .toggle-btn {
+  left: 60px; /* adjust when collapsed */
+}
+
+
+.sidebar {
+  transition: width 0.3s ease;
+}
+
+
+.main-content {
+  margin-left: 220px;
+  padding: 20px;
+  flex: 1;
+}
+
+  </style>
+</head>
+<body>
+<a href="/index.html" id="logo-wrapper">
+  <img src="/assets/image.png" alt="Mock Interview Logo" id="logo">
+</a>
+<div class="layout">
+  <div class="sidebar">
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar-logo"></div>
+    <ul class="sidebar-menu">
+      <li onclick="navigateTo('index.html')">🏠 <span>Dashboard</span></li>
+<li onclick="navigateTo('quiz/index.html')">📝 <span>Quiz</span></li>
+<li onclick="navigateTo('fluency/index.html')">🎤 <span>Fluency</span></li>
+<li onclick="navigateTo('coding/index.html')">💻 <span>Coding</span></li>
+<!-- <li onclick="navigateTo('about.html')">👨‍🏫 <span>About</span></li> -->
+ <li onclick="navigateTo('topics.html')">📚 <span>Topics</span></li> 
+
+    </ul>
+  </div>
+  <div class="main-content">
+
+<!-- Avatar Dropdown Menu -->
+<!-- Dropdown (Top-Right Avatar + Menu) -->
+<div class="dropdown" style="position: fixed; top: 16px; right: 20px; z-index: 999;">
+  <!-- Avatar button (clickable) -->
+  <img src="https://assets.leetcode.com/users/default_avatar.jpg" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;" onclick="toggleDropdown()" />
+
+  <!-- Dropdown content -->
+  <div id="dropdownContent" style="display: none; background-color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-top: 5px; width: 160px;">
+    <button onclick="window.location.href='login.html'" style="padding: 6px 10px; width: 100%; border-radius: 6px; font-size: 14px;">Login / Signup</button>
+    <!-- <hr style="margin: 10px 0;"> -->
+    <button onclick="window.location.href='profile.html'" style="padding: 6px 10px;width:100%;border-radius:6px;font-size: 14px;">Profile</button>
+    <button onclick="window.location.href='community.html'" style="padding: 6px 10px;width:100%;border-radius:6px;font-size: 14px;">comm</button>
+    <button onclick="window.location.href='certificate.html'" style="padding: 6px 10px;width:100%;border-radius:6px;font-size: 14px;">certificate</button>
+    <label for="themeSelect" style="font-weight: bold; font-size: 13px;">Theme:</label>
+    <select id="themeSelect" onchange="setTheme(this.value)" style="margin-top: 4px; padding: 4px 6px; width: 100%;">
+      <option value="white">White</option>
+      <option value="dark">Dark</option>
+      <option value="blue">Blue</option>
+    </select>
+  </div>
+</div>
+
+
+
+
+
+  <h1>Mock Interview</h1>
+
+  <div class="card-container">
+    <!-- Quiz Card -->
+    <div class="card" onclick="goToSection('quiz') "data-disabled="false">
+      <img src="https://media.istockphoto.com/id/2187798142/photo/creative-idea-concept-with-light-bulb-and-human-brain-illustration-and-with-hand-writing-in.jpg?s=612x612&w=0&k=20&c=w6p1HH66COdDPdZTqzGhe8FCCt0fdSLW8l_gpoKD6IM=" alt="Quiz">
+      <div class="card-content">
+        <div class="card-title">Quiz</div>
+        <div class="card-desc">Take an interactive multiple-choice quiz generated by AI based on your topic.</div>
+      </div>
+    </div>
+
+    <!-- Fluency Card -->
+    <div class="card" onclick="goToSection('fluency')"data-disabled="false">
+      <img src="https://media.istockphoto.com/id/1485822550/photo/futuristic-cpu-and-question-icon-vibrant-modern-colours-future-technology-background-with.webp?a=1&b=1&s=612x612&w=0&k=20&c=RffDKaoVDNv8W5d_Hm07_O6Kn_jBFri7I5Xhc2Bp89k=" alt="Fluency">
+      <div class="card-content">
+        <div class="card-title">Fluency</div>
+        <div class="card-desc">Answer interview questions by speaking. Get AI-based feedback and fluency analysis.</div>
+      </div>
+    </div>
+
+    <!-- Coding Card -->
+    <div class="card" onclick="goToSection('coding')"data-disabled="false">
+      <img src="https://media.istockphoto.com/id/537331500/photo/programming-code-abstract-technology-background-of-software-deve.webp?a=1&b=1&s=612x612&w=0&k=20&c=tYuiZwlaXjvdPwGxjZbQBdtcgG_i3SambRbsaGuW1jM=" alt="Coding">
+      <div class="card-content">
+        <div class="card-title">Coding</div>
+        <div class="card-desc">Solve real coding problems in an interactive code editor with AI feedback.</div>
+      </div>
+    </div>
+  </div>
+    </div> <!-- close main-content -->
+</div> <!-- close layout -->
+<div id="footer-container"></div>
+<script>
+  fetch("/footer/footer.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("footer-container").innerHTML = html;
+    });
+</script>
+<script>
+  // Handle theme on page load
+  window.onload = () => {
+    const savedTheme = localStorage.getItem("theme") || "white";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    const themeSelect = document.getElementById("themeSelect");
+    if (themeSelect) themeSelect.value = savedTheme;
+
+    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+
+    // const cards = document.querySelectorAll(".card");
+    // cards.forEach(card => {
+    //   if (isLoggedIn) {
+    //     card.dataset.disabled = "false";
+    //     card.style.opacity = "1";
+    //     card.style.pointerEvents = "auto";
+    //   } else {
+    //     card.dataset.disabled = "true";
+    //     card.style.opacity = "0.5";
+    //     card.style.pointerEvents = "auto"; // allow click to trigger alert
+    //   }
+    // });
+  };
+
+  // Theme change
+  function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }
+
+  // Dropdown toggle
+  function toggleDropdown() {
+    const dropdown = document.getElementById('dropdownContent');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Handle clicks on cards
+  function goToSection(section) {
+    const card = event.currentTarget;
+    // if (card.dataset.disabled === "true") {
+    //   alert("Please login to access this feature.");
+    //   return;
+    // }
+
+    if (section === 'quiz') {
+      window.location.href = '/quiz/index.html';
+    } else if (section === 'fluency') {
+      window.location.href = '/fluency/index.html';
+    } else if (section === 'coding') {
+      window.location.href = '/coding/index.html';
+    }
+  }
+</script>
+<script>
+  function navigateTo(path) {
+    window.location.href = path;
+  }
+</script>
+<script>
+  function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('collapsed');
+  }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Secure Auth Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --primary-hover: #3a56d4;
+      --success-color: #06d6a0;
+      --error-color: #ef476f;
+      --warning-color: #ffd166;
+      --white: #ffffff;
+      --light-gray: #f8f9fa;
+      --medium-gray: #e9ecef;
+      --dark-gray: #6c757d;
+      --black: #212529;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      --box-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --transition-fast: all 0.15s ease;
+    }
+
+    [data-theme="dark"] {
+      --primary-color: #4895ef;
+      --primary-hover: #3a7bc8;
+      --bg-color: #121212;
+      --container-bg: #1e1e1e;
+      --text-color: #f8f9fa;
+      --text-muted: #adb5bd;
+      --input-bg: #2d2d2d;
+      --input-border: #3d3d3d;
+      --status-bg: #2d2d2d;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      --box-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="blue"] {
+      --primary-color: #4cc9f0;
+      --primary-hover: #3ab0d4;
+      --bg-color: #1e1e4f;
+      --container-bg: #2a2a6a;
+      --text-color: #f8f9fa;
+      --text-muted: #b8c1ec;
+      --input-bg: #3a3a7a;
+      --input-border: #4a4a8a;
+      --status-bg: #3a3a7a;
+    }
+
+    [data-theme="white"] {
+      --bg-color: #ffffff;
+      --container-bg: #f8f9fa;
+      --text-color: #212529;
+      --text-muted: #6c757d;
+      --input-bg: #ffffff;
+      --input-border: #ced4da;
+      --status-bg: #e9ecef;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      transition: var(--transition);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 460px;
+      background: var(--container-bg);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-lg);
+      transition: var(--transition);
+      animation: fadeIn 0.5s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), #4cc9f0);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+      animation: bounceIn 0.8s ease-out;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .logo i {
+      font-size: 52px;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--primary-color), #4cc9f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 4px;
+    }
+
+    .logo p {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--input-border);
+      position: relative;
+    }
+
+    .tab-indicator {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      height: 2px;
+      width: 50%;
+      background-color: var(--primary-color);
+      transition: var(--transition);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 14px 16px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+      text-align: center;
+      position: relative;
+    }
+
+    .tab.active {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .tab:hover {
+      color: var(--primary-color);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeInUp 0.4s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color);
+      font-size: 14px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--dark-gray);
+      transition: var(--transition-fast);
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      border: 1px solid var(--input-border);
+      border-radius: var(--border-radius-sm);
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      font-size: 15px;
+      transition: var(--transition-fast);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    input:focus + i {
+      color: var(--primary-color);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--dark-gray);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .password-toggle:hover {
+      color: var(--primary-color);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 8px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .btn-google {
+      background-color: var(--white);
+      color: #757575;
+      border: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-google:hover {
+      background-color: #f5f5f5;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-google i {
+      margin-right: 12px;
+      color: #db4437;
+      font-size: 18px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 28px 0;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: var(--input-border);
+    }
+
+    .divider::before {
+      margin-right: 16px;
+    }
+
+    .divider::after {
+      margin-left: 16px;
+    }
+
+    #auth-status {
+      margin-top: 24px;
+      padding: 14px;
+      border-radius: var(--border-radius-sm);
+      text-align: center;
+      background-color: var(--status-bg);
+      font-size: 14px;
+      transition: var(--transition);
+      line-height: 1.5;
+    }
+
+    .auth-success {
+      color: var(--success-color);
+      border: 1px solid rgba(6, 214, 160, 0.3);
+      background-color: rgba(6, 214, 160, 0.1) !important;
+    }
+
+    .auth-error {
+      color: var(--error-color);
+      border: 1px solid rgba(239, 71, 111, 0.3);
+      background-color: rgba(239, 71, 111, 0.1) !important;
+    }
+
+    .auth-warning {
+      color: var(--warning-color);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      background-color: rgba(255, 209, 102, 0.1) !important;
+    }
+
+    .theme-selector {
+      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .theme-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .theme-btn.active {
+      border-color: var(--primary-color);
+      transform: scale(1.1);
+    }
+
+    .theme-white {
+      background: #ffffff;
+      color: #212529;
+    }
+
+    .theme-dark {
+      background: #121212;
+    }
+
+    .theme-blue {
+      background: #1e1e4f;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    .forgot-password a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: var(--transition-fast);
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    .password-strength {
+      margin-top: 8px;
+      height: 4px;
+      background-color: var(--input-border);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0;
+      background-color: var(--error-color);
+      transition: var(--transition-fast);
+    }
+
+    .password-strength-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .terms {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+
+    .terms a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .terms a:hover {
+      text-decoration: underline;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 24px;
+      }
+      
+      .logo i {
+        font-size: 46px;
+      }
+      
+      .logo h1 {
+        font-size: 24px;
+      }
+
+      .logo p {
+        font-size: 13px;
+      }
+
+      input {
+        padding: 12px 12px 12px 44px;
+      }
+    }
+
+    /* Ripple effect */
+    .ripple {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ripple-effect {
+      position: absolute;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(2.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">
+    <i class="fas fa-shield-alt"></i>
+    <h1>Secure Auth</h1>
+    <p>Sign in to access your account</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('login')">Sign In</div>
+    <div class="tab" onclick="switchTab('signup')">Sign Up</div>
+    <div class="tab-indicator"></div>
+  </div>
+
+  <!-- Login Tab -->
+  <div id="login-tab" class="tab-content active">
+    <div class="form-group">
+      <label for="loginEmail">Email Address</label>
+      <div class="input-wrapper">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="loginEmail" placeholder="Enter your email" />
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="loginPassword">Password</label>
+      <div class="input-wrapper">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="loginPassword" placeholder="Enter your password" />
+        <i class="fas fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
+      </div>
+      <div class="forgot-password">
+        <a href="#" onclick="resetPassword()">Forgot password?</a>
+      </div>
+    </div>
+    
+    <button class="ripple" onclick="emailLogin(event)">
+      Sign In
+      <span id="login-spinner" class="loading hidden"></span>
+    </button>
+    
+    <div class="divider">or continue with</div>
+    
+    <button class="btn-google ripple" onclick="googleLogin(event)">
+      <i class="fab fa-google"></i>
+      Google
+    </button>
+  </div>
+
+  <!-- Signup Tab -->
+  <div id="signup-tab" class="tab-content">
+    <div class="form-group">
+      <label for="signupEmail">Email Address</label>
+      <div class="input-wrapper">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="signupEmail" placeholder="Enter your email" />
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="signupPassword">Password</label>
+      <div class="input-wrapper">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="signupPassword" placeholder="Create a password" oninput="checkPasswordStrength(this.value)" />
+        <i class="fas fa-eye password-toggle" onclick="togglePassword('signupPassword', this)"></i>
+      </div>
+      <div class="password-strength">
+        <div class="password-strength-bar" id="password-strength-bar"></div>
+      </div>
+      <div class="password-strength-text" id="password-strength-text"></div>
+    </div>
+    
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <div class="input-wrapper">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="confirmPassword" placeholder="Confirm your password" />
+        <i class="fas fa-eye password-toggle" onclick="togglePassword('confirmPassword', this)"></i>
+      </div>
+    </div>
+    
+    <button class="ripple" onclick="emailSignup(event)">
+      Create Account
+      <span id="signup-spinner" class="loading hidden"></span>
+    </button>
+    
+    <div class="divider">or continue with</div>
+    
+    <button class="btn-google ripple" onclick="googleLogin(event)">
+      <i class="fab fa-google"></i>
+      Google
+    </button>
+
+    <div class="terms">
+      By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+    </div>
+  </div>
+
+  <!-- Auth Status -->
+  <div id="auth-status">Not signed in.</div>
+
+  <!-- Theme Selector -->
+  <div class="theme-selector">
+    <div class="theme-btn theme-white active" onclick="setTheme('white')" title="Light theme">
+      <i class="fas fa-sun"></i>
+    </div>
+    <div class="theme-btn theme-dark" onclick="setTheme('dark')" title="Dark theme">
+      <i class="fas fa-moon"></i>
+    </div>
+    <div class="theme-btn theme-blue" onclick="setTheme('blue')" title="Blue theme">
+      <i class="fas fa-palette"></i>
+    </div>
+  </div>
+</div>
+
+<div id="recaptcha-container"></div>
+
+<!-- Firebase Setup -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut,
+    sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDy0I8E60PAIf7DnIv2-fu4eZK50OGHifM",
+    authDomain: "login-interview-b2d85.firebaseapp.com",
+    databaseURL: "https://login-interview-b2d85-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "login-interview-b2d85",
+    storageBucket: "login-interview-b2d85.appspot.com",
+    messagingSenderId: "467565649214",
+    appId: "1:467565649214:web:d4dee8fa95692320c6606f",
+    measurementId: "G-C87HTBE4FZ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  const authStatusElement = document.getElementById("auth-status");
+  const tabIndicator = document.querySelector('.tab-indicator');
+
+  // UI Functions
+  window.switchTab = (tabName) => {
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-content').forEach(content => {
+      content.classList.remove('active');
+    });
+    
+    const activeTab = document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`);
+    activeTab.classList.add('active');
+    document.getElementById(`${tabName}-tab`).classList.add('active');
+    
+    // Move tab indicator
+    const tabIndex = tabName === 'login' ? 0 : 1;
+    tabIndicator.style.transform = `translateX(${tabIndex * 100}%)`;
+  };
+
+  window.setTheme = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    document.querySelector(`.theme-btn.theme-${theme}`).classList.add('active');
+    
+    // Save theme preference to localStorage
+    localStorage.setItem('themePreference', theme);
+  };
+
+  // Load saved theme preference
+  const savedTheme = localStorage.getItem('themePreference') || 'white';
+  setTheme(savedTheme);
+
+  window.togglePassword = (inputId, icon) => {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  };
+
+  window.checkPasswordStrength = (password) => {
+    const strengthBar = document.getElementById('password-strength-bar');
+    const strengthText = document.getElementById('password-strength-text');
+    
+    // Calculate strength
+    let strength = 0;
+    if (password.length > 0) strength += 1;
+    if (password.length >= 8) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    
+    // Update UI
+    const width = (strength / 5) * 100;
+    strengthBar.style.width = `${width}%`;
+    
+    if (password.length === 0) {
+      strengthText.textContent = '';
+      strengthBar.style.backgroundColor = 'transparent';
+    } else if (strength <= 2) {
+      strengthText.textContent = 'Weak';
+      strengthBar.style.backgroundColor = 'var(--error-color)';
+    } else if (strength === 3) {
+      strengthText.textContent = 'Moderate';
+      strengthBar.style.backgroundColor = 'var(--warning-color)';
+    } else {
+      strengthText.textContent = 'Strong';
+      strengthBar.style.backgroundColor = 'var(--success-color)';
+    }
+  };
+
+  // Ripple effect for buttons
+  function createRipple(event) {
+    const button = event.currentTarget;
+    const circle = document.createElement("span");
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+    circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+    circle.classList.add("ripple-effect");
+
+    const ripple = button.getElementsByClassName("ripple-effect")[0];
+    if (ripple) ripple.remove();
+
+    button.appendChild(circle);
+  }
+
+  // Auth Functions
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      authStatusElement.textContent = `Welcome back, ${user.email || user.displayName || 'User'}!`;
+      authStatusElement.className = 'auth-success';
+      
+      // Hide auth form if user is logged in
+      document.querySelector('.tabs').classList.add('hidden');
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelector('.divider').classList.add('hidden');
+    } else {
+      authStatusElement.textContent = "Not signed in.";
+      authStatusElement.className = '';
+      
+      // Show auth form if user is logged out
+      document.querySelector('.tabs').classList.remove('hidden');
+      document.getElementById('login-tab').classList.add('active');
+      document.querySelector('.divider').classList.remove('hidden');
+    }
+  });
+
+  window.emailSignup = async (event) => {
+    createRipple(event);
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
+    const spinner = document.getElementById("signup-spinner");
+
+    if (!email || !password || !confirmPassword) {
+      showError("Please fill in all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      showError("Passwords don't match.");
+      return;
+    }
+
+    if (password.length < 6) {
+      showError("Password should be at least 6 characters.");
+      return;
+    }
+
+    try {
+      spinner.classList.remove('hidden');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userProfileRef = ref(db, `userProfiles/${user.uid}`);
+      await set(userProfileRef, {
+        email: user.email,
+        createdAt: new Date().toISOString()
+      });
+
+      showSuccess("Account created successfully! You are now logged in.");
+      switchTab('login');
+    } catch (error) {
+      showError("Signup failed: " + error.message);
+      console.error("Email signup failed:", error);
+    } finally {
+      spinner.classList.add('hidden');
+    }
+  };
+
+  window.emailLogin = async (event) => {
+    createRipple(event);
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+    const spinner = document.getElementById("login-spinner");
+
+    if (!email || !password) {
+      showError("Please enter both email and password.");
+      return;
+    }
+
+    try {
+      spinner.classList.remove('hidden');
+      await signInWithEmailAndPassword(auth, email, password);
+      showSuccess("Login successful!");
+    } catch (error) {
+      showError("Login failed: " + error.message);
+      console.error("Email login failed:", error);
+    } finally {
+      spinner.classList.add('hidden');
+    }
+  };
+
+  window.googleLogin = async (event) => {
+    createRipple(event);
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const userProfileRef = ref(db, `userProfiles/${user.uid}`);
+      const snapshot = await get(userProfileRef);
+      
+      if (!snapshot.exists()) {
+        await set(userProfileRef, {
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      showSuccess("Google login successful!");
+    } catch (error) {
+      showError("Google login failed: " + error.message);
+      console.error("Google login failed:", error);
+    }
+  };
+
+  window.resetPassword = async () => {
+    const email = document.getElementById("loginEmail").value.trim();
+    
+    if (!email) {
+      showError("Please enter your email address first.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showSuccess(`Password reset email sent to ${email}. Please check your inbox.`);
+    } catch (error) {
+      showError("Password reset failed: " + error.message);
+      console.error("Password reset failed:", error);
+    }
+  };
+
+  window.signOutUser = async () => {
+    try {
+      await signOut(auth);
+      showSuccess("Signed out successfully!");
+    } catch (error) {
+      showError("Sign out failed: " + error.message);
+      console.error("Sign out failed:", error);
+    }
+  };
+
+  // Helper functions
+  function showError(message) {
+    authStatusElement.textContent = message;
+    authStatusElement.className = 'auth-error';
+  }
+
+  function showSuccess(message) {
+    authStatusElement.textContent = message;
+    authStatusElement.className = 'auth-success';
+  }
+
+  function showWarning(message) {
+    authStatusElement.textContent = message;
+    authStatusElement.className = 'auth-warning';
+  }
+
+  // Initialize ripple buttons
+  document.querySelectorAll('.ripple').forEach(button => {
+    button.addEventListener('click', createRipple);
+  });
+</script>
+
+</body>
+</html>

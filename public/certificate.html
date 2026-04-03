@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificate of Completion</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background: #f4f4f4;
+      padding: 40px;
+    }
+    .certificate {
+      width: 900px;
+      padding: 40px;
+      margin: auto;
+      border: 10px solid #2e3c57;
+      background: white;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .certificate h1 {
+      font-size: 36px;
+      margin-bottom: 0;
+    }
+    .certificate h2 {
+      margin-top: 5px;
+      color: #444;
+    }
+    .name {
+      font-size: 28px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .details {
+      margin: 20px 0;
+      font-size: 20px;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .signature {
+      text-align: left;
+    }
+    .logo {
+      width: 120px;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+    .download-btn {
+      display: block;
+      margin: 30px auto;
+      padding: 10px 20px;
+      background: #2e3c57;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .form-container {
+      width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .submit-btn {
+      background: #2e3c57;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container" id="formContainer">
+    <h2>Generate Certificate</h2>
+    <div class="form-group">
+      <label for="certificateType">Certificate Type:</label>
+      <select id="certificateType">
+        <option value="completion">Course Completion</option>
+        <option value="achievement">Achievement</option>
+        <option value="excellence">Excellence Award</option>
+        <option value="participation">Participation</option>
+        <option value="workshop">Workshop Completion</option>
+        <option value="certification">Professional Certification</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="userName">Full Name:</label>
+      <input type="text" id="userNameInput" required>
+    </div>
+    <div class="form-group">
+      <label for="moduleName">Course/Module Name:</label>
+      <input type="text" id="moduleNameInput" required>
+    </div>
+    <div class="form-group">
+      <label for="score">Score (optional):</label>
+      <input type="text" id="scoreInput" placeholder="e.g., 9/10 or 95%">
+    </div>
+    <div class="form-group">
+      <label for="date">Completion Date:</label>
+      <input type="date" id="dateInput" required>
+    </div>
+    <button class="submit-btn" onclick="generateCertificate()">Generate Certificate</button>
+  </div>
+
+  <div class="certificate" id="certificate" style="display: none;">
+    <img src="logo.png" class="logo" alt="Platform Logo"/>
+    <h1 id="certificateTitle">Certificate of Completion</h1>
+    <h2>This is to certify that</h2>
+    <div class="name" id="userName">Riyan Garg</div>
+    <div class="details">
+      has successfully completed the <span id="certificateTypeText">module</span><br>
+      <strong id="moduleName">Advanced JavaScript Quiz</strong><br>
+      <span id="scoreContainer">with a score of <strong id="score">9/10</strong></span> on <strong id="date">22 July 2025</strong>.
+    </div>
+    <div class="footer">
+      <div class="signature">
+        <img src="signature.png" alt="Signature" height="60"/><br>
+        <strong>Founder, MockInterview Pro</strong>
+      </div>
+      <div><strong>Certificate ID:</strong> <span id="certificateId">CERT-00123</span></div>
+    </div>
+  </div>
+
+  <button class="download-btn" id="downloadBtn" style="display: none;" onclick="downloadCertificate()">Download PDF</button>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  
+  <script>
+    // Your web app's Firebase configuration
+     const firebaseConfig = {
+    apiKey: "AIzaSyDy0I8E60PAIf7DnIv2-fu4eZK50OGHifM",
+    authDomain: "login-interview-b2d85.firebaseapp.com",
+    databaseURL: "https://login-interview-b2d85-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "login-interview-b2d85",
+    storageBucket: "login-interview-b2d85.appspot.com",
+    messagingSenderId: "467565649214",
+    appId: "1:467565649214:web:d4dee8fa95692320c6606f",
+    measurementId: "G-C87HTBE4FZ"
+  };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    function generateCertificate() {
+      const userName = document.getElementById('userNameInput').value;
+      const moduleName = document.getElementById('moduleNameInput').value;
+      const score = document.getElementById('scoreInput').value;
+      const dateInput = document.getElementById('dateInput').value;
+      const certificateType = document.getElementById('certificateType').value;
+      
+      if (!userName || !moduleName || !dateInput) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      // Format date
+      const dateObj = new Date(dateInput);
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const formattedDate = dateObj.toLocaleDateString('en-US', options);
+      
+      // Set certificate title based on type
+      let certificateTitle = "Certificate of Completion";
+      let typeText = "module";
+      
+      switch(certificateType) {
+        case 'achievement':
+          certificateTitle = "Certificate of Achievement";
+          typeText = "achievement in";
+          break;
+        case 'excellence':
+          certificateTitle = "Certificate of Excellence";
+          typeText = "demonstration of excellence in";
+          break;
+        case 'participation':
+          certificateTitle = "Certificate of Participation";
+          typeText = "participation in";
+          break;
+        case 'workshop':
+          certificateTitle = "Workshop Completion Certificate";
+          typeText = "workshop on";
+          break;
+        case 'certification':
+          certificateTitle = "Professional Certification";
+          typeText = "certification in";
+          break;
+      }
+      
+      // Update certificate content
+      document.getElementById('certificateTitle').textContent = certificateTitle;
+      document.getElementById('userName').textContent = userName;
+      document.getElementById('moduleName').textContent = moduleName;
+      document.getElementById('certificateTypeText').textContent = typeText;
+      document.getElementById('date').textContent = formattedDate;
+      
+      // Handle score display
+      const scoreContainer = document.getElementById('scoreContainer');
+      if (score) {
+        scoreContainer.innerHTML = `with a score of <strong id="score">${score}</strong>`;
+      } else {
+        scoreContainer.innerHTML = '';
+      }
+      
+      // Generate unique certificate ID
+      const certId = 'CERT-' + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('certificateId').textContent = certId;
+      
+      // Show certificate and download button
+      document.getElementById('certificate').style.display = 'block';
+      document.getElementById('downloadBtn').style.display = 'block';
+      document.getElementById('formContainer').style.display = 'none';
+      
+      // Save to Firebase
+      saveCertificateToFirebase(userName, moduleName, score, formattedDate, certificateTitle, certId);
+    }
+    
+    function saveCertificateToFirebase(name, module, score, date, type, certId) {
+      db.collection("certificates").add({
+        userName: name,
+        moduleName: module,
+        score: score,
+        date: date,
+        type: type,
+        certificateId: certId,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        console.log("Certificate saved to Firebase");
+      })
+      .catch((error) => {
+        console.error("Error saving certificate: ", error);
+      });
+    }
+
+    function downloadCertificate() {
+      const element = document.getElementById('certificate');
+      const opt = {
+        margin:       0,
+        filename:     'certificate.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+      };
+      html2pdf().from(element).set(opt).save();
+    }
+  </script>
+</body>
+</html>

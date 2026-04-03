@@ -1,0 +1,78 @@
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #fff8e1, #fff8e1);
+    background-image: url('https://static.vecteezy.com/system/resources/previews/008/130/358/non_2x/light-yellow-colored-crumpled-paper-texture-background-for-design-decorative-free-photo.jpg');
+  }
+
+  #audio_page1 {
+    height: 100vh;
+    background-image: url('https://t4.ftcdn.net/jpg/07/59/03/45/360_F_759034537_xq23UpBFIfd1Wj2W02WUKoGR51BSDjoX.jpg'); /* You can replace this */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 1px 1px 4px black;
+  }
+
+  #audio_page1 input {
+    padding: 10px;
+    font-size: 16px;
+    width: 300px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 6px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #388e3c;
+    transform: scale(1.05);
+  }
+.status-msg {
+  color: #888;
+  font-style: italic;
+  margin-top: 10px;
+}
+  .question-section {
+    padding: 30px;
+    max-width: 600px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    display: none;
+    text-align: center;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  audio {
+    margin-top: 10px;
+  }
+
+  /* Optional: for small screens */
+  @media (max-width: 600px) {
+    #audio_page1 input {
+      width: 80%;
+    }
+  }
+

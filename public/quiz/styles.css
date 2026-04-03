@@ -1,0 +1,169 @@
+/* General Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Page Background */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f9ff;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  color: #01254b;
+}
+
+/* ------------------ PAGE 1 ------------------ */
+.input-container {
+  text-align: center;
+  margin-top: 15%;
+}
+
+#text {
+  padding: 12px 16px;
+  font-size: 16px;
+  width: 250px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+#text:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+}
+
+#startQuizBtn {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #01254b;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#startQuizBtn:hover {
+  background-color: #023061;
+  transform: translateY(-2px);
+}
+
+/* ------------------ QUESTIONS SECTION ------------------ */
+.questions {
+  background-color: #f0f4fa;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.questions h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #01254b;
+  text-align: center;
+}
+
+/* Option Layout */
+.q_1, .q_2, .q_3, .q_4, .q_5, .q_6, .q_7, .q_8, .q_9, .q_10 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Option Buttons */
+.questions button {
+  width: 280px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-color: #01254b;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.questions button:hover {
+  background-color: #023061;
+  transform: scale(1.03);
+}
+
+/* ------------------ NAVIGATION ------------------ */
+.next-fixed {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 12px;
+  z-index: 1000;
+}
+
+.next-fixed button {
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  background-color: #01254b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.next-fixed button:hover {
+  background-color: #023061;
+  transform: translateY(-2px);
+}
+
+/* ------------------ RESULT CHART ------------------ */
+#chartPage {
+  display: none;
+  text-align: center;
+  background: #f9fbff;
+  padding: 30px;
+}
+
+#resultChart {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#nextToAnalysis {
+  margin-top: 20px;
+  background-color: #01254b;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#nextToAnalysis:hover {
+  background-color: #023061;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .questions button, #startQuizBtn, #text {
+    width: 90%;
+  }
+  .next-fixed {
+    flex-direction: column;
+    right: 10px;
+    bottom: 10px;
+  }
+}

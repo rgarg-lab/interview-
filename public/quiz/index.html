@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="white">
+<head>
+  <meta charset="UTF-8">
+  <title>Interview</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --btn-bg: #01254b;
+    --btn-hover: #01264c;
+  }
+
+  [data-theme="white"] {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --btn-bg: #01254b;
+    --btn-hover: #01264c;
+  }
+
+  [data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #f0f0f0;
+    --btn-bg: #333;
+    --btn-hover: #555;
+  }
+
+  [data-theme="blue"] {
+    --bg-color: #1e1e4f;
+    --text-color: #ffffff;
+    --btn-bg: #4c65dd;
+    --btn-hover: #728dff;
+  }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  #text {
+    padding: 12px 16px;
+    font-size: 17px;
+    width: 280px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-right: 10px;
+    outline: none;
+    transition: 0.3s ease;
+  }
+
+  #text:focus {
+    border-color: var(--btn-bg);
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+  }
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh; /* takes up 70% of viewport height */
+  gap: 20px;
+}
+.input-center-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+
+  .questions {
+    background: var(--bg-color);
+    padding: 40px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+
+  .questions h2 {
+    color: var(--text-color);
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .q_1, .q_2, .q_3, .q_4, .q_5, .q_6, .q_7, .q_8, .q_9, .q_10 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .questions button {
+    width: 260px;
+    padding: 12px 18px;
+    font-size: 17px;
+    font-weight: 500;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--btn-bg);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.25s ease, transform 0.1s ease;
+  }
+
+  .questions button:hover {
+    background-color: var(--btn-hover);
+    transform: scale(1.02);
+  }
+
+  .next-fixed {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+    z-index: 1000;
+  }
+
+  #startQuizBtn {
+    padding: 12px 20px;
+    font-size: 17px;
+    font-weight: 500;
+    background-color: var(--btn-bg);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.1s ease;
+  }
+
+  #startQuizBtn:hover {
+    background-color: var(--btn-hover);
+    transform: scale(1.02);
+  }
+
+  .theme-switcher {
+    position: fixed;
+    top: 12px;
+    right: 20px;
+    z-index: 1000;
+  }
+
+  .theme-switcher select {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    outline: none;
+    border: 1px solid #ccc;
+    background: var(--bg-color);
+    color: var(--text-color);
+  }
+
+  #chartPage {
+    display: none;
+    padding: 30px;
+    text-align: center;
+  }
+
+  #nextToAnalysis {
+    padding: 12px 20px;
+    background-color: var(--btn-bg);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  #nextToAnalysis:hover {
+    background-color: var(--btn-hover);
+  }
+ #logo-wrapper {
+  position: fixed; /* or absolute if you prefer */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+}
+
+#logo {
+  width: 90px;
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+
+#logo:hover {
+  transform: scale(1.05);
+}
+.input-header h2 {
+  text-align: center;
+  margin-top: 40px;
+}
+
+</style>
+
+</head>
+<body>
+<a href="/index.html" id="logo-wrapper">
+  <img src="/assets/image.png" alt="Mock Interview Logo" id="logo">
+</a>
+
+
+  <div class="theme-switcher">
+    <label for="themeSelect"><strong>Theme:</strong></label>
+    <select id="themeSelect" onchange="setTheme(this.value)">
+      <option value="white">White</option>
+      <option value="dark">Dark</option>
+      <option value="blue">Blue</option>
+    </select>
+  </div>
+
+<div id="page2" style="display: block;">
+  <div class="input-center-wrapper">
+    <h2>Enter Topic for Quiz Interview</h2>
+    <div class="input-container">
+      <input type="text" id="text" placeholder="Coding Language ">
+      <button id="startQuizBtn" onclick="dosomething()">start quiz</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Questions -->
+  <section class="questions" id="page3" style="display: none;">
+    <div id="q1" style="display: none;">
+      <h2 id="ques1">Question 1</h2>
+      <div class="q_1">
+        <button id="q1o1" onclick="q1s1()">Option 1</button>
+        <button id="q1o2" onclick="q1s2()">Option 2</button>
+        <button id="q1o3" onclick="q1s3()">Option 3</button>
+        <button id="q1o4" onclick="q1s4()">Option 4</button>
+      </div>
+      <div class="next-fixed"><button onclick="q2_func()">Next</button></div>
+    </div>
+<div id="q2" style="display: none;">
+  <h2 id="ques2">Question 2</h2>
+  <div class="q_2">
+    <button id="q2o1" onclick="q2s1()">Option 1</button>
+    <button id="q2o2" onclick="q2s2()">Option 2</button>
+    <button id="q2o3" onclick="q2s3()">Option 3</button>
+    <button id="q2o4" onclick="q2s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q1_func()">Prev</button>
+    <button onclick="q3_func()">Next</button>
+  </div>
+</div>
+
+<div id="q3" style="display: none;">
+  <h2 id="ques3">Question 3</h2>
+  <div class="q_3">
+    <button id="q3o1" onclick="q3s1()">Option 1</button>
+    <button id="q3o2" onclick="q3s2()">Option 2</button>
+    <button id="q3o3" onclick="q3s3()">Option 3</button>
+    <button id="q3o4" onclick="q3s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q2_func()">Prev</button>
+    <button onclick="q4_func()">Next</button>
+  </div>
+</div>
+
+<div id="q4" style="display: none;">
+  <h2 id="ques4">Question 4</h2>
+  <div class="q_4">
+    <button id="q4o1" onclick="q4s1()">Option 1</button>
+    <button id="q4o2" onclick="q4s2()">Option 2</button>
+    <button id="q4o3" onclick="q4s3()">Option 3</button>
+    <button id="q4o4" onclick="q4s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q3_func()">Prev</button>
+    <button onclick="q5_func()">Next</button>
+  </div>
+</div>
+
+<div id="q5" style="display: none;">
+  <h2 id="ques5">Question 5</h2>
+  <div class="q_5">
+    <button id="q5o1" onclick="q5s1()">Option 1</button>
+    <button id="q5o2" onclick="q5s2()">Option 2</button>
+    <button id="q5o3" onclick="q5s3()">Option 3</button>
+    <button id="q5o4" onclick="q5s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q4_func()">Prev</button>
+    <button onclick="q6_func()">Next</button>
+  </div>
+</div>
+
+<div id="q6" style="display: none;">
+  <h2 id="ques6">Question 6</h2>
+  <div class="q_6">
+    <button id="q6o1" onclick="q6s1()">Option 1</button>
+    <button id="q6o2" onclick="q6s2()">Option 2</button>
+    <button id="q6o3" onclick="q6s3()">Option 3</button>
+    <button id="q6o4" onclick="q6s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q5_func()">Prev</button>
+    <button onclick="q7_func()">Next</button>
+  </div>
+</div>
+
+<div id="q7" style="display: none;">
+  <h2 id="ques7">Question 7</h2>
+  <div class="q_7">
+    <button id="q7o1" onclick="q7s1()">Option 1</button>
+    <button id="q7o2" onclick="q7s2()">Option 2</button>
+    <button id="q7o3" onclick="q7s3()">Option 3</button>
+    <button id="q7o4" onclick="q7s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q6_func()">Prev</button>
+    <button onclick="q8_func()">Next</button>
+  </div>
+</div>
+
+<div id="q8" style="display: none;">
+  <h2 id="ques8">Question 8</h2>
+  <div class="q_8">
+    <button id="q8o1" onclick="q8s1()">Option 1</button>
+    <button id="q8o2" onclick="q8s2()">Option 2</button>
+    <button id="q8o3" onclick="q8s3()">Option 3</button>
+    <button id="q8o4" onclick="q8s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q7_func()">Prev</button>
+    <button onclick="q9_func()">Next</button>
+  </div>
+</div>
+
+<div id="q9" style="display: none;">
+  <h2 id="ques9">Question 9</h2>
+  <div class="q_9">
+    <button id="q9o1" onclick="q9s1()">Option 1</button>
+    <button id="q9o2" onclick="q9s2()">Option 2</button>
+    <button id="q9o3" onclick="q9s3()">Option 3</button>
+    <button id="q9o4" onclick="q9s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q8_func()">Prev</button>
+    <button onclick="q10_func()">Next</button>
+  </div>
+</div>
+
+<div id="q10" style="display: none;">
+  <h2 id="ques10">Question 10</h2>
+  <div class="q_10">
+    <button id="q10o1" onclick="q10s1()">Option 1</button>
+    <button id="q10o2" onclick="q10s2()">Option 2</button>
+    <button id="q10o3" onclick="q10s3()">Option 3</button>
+    <button id="q10o4" onclick="q10s4()">Option 4</button>
+  </div>
+  <div class="next-fixed">
+    <button onclick="q9_func()">Prev</button>
+    <button onclick="submitQuiz()">Submit</button>
+  </div>
+</div>
+
+
+    <!-- Chart Page -->
+    <div id="chartPage" style="display: none;">
+      <canvas id="resultChart" width="300" height="300"></canvas>
+      <div style="text-align: center; margin-top: 20px;">
+        <button id="nextToAnalysis" onclick="showAnalysis()">View Detailed Analysis</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+  <script src="option.js"></script>
+  <!-- <script src="result.js"></script> -->
+  <script src="question.js"></script>
+
+  <!-- Theme persistence -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'white';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('themeSelect').value = savedTheme;
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+    window.onload = () => {
+  const savedTopic = localStorage.getItem("selectedTopic");
+  if (savedTopic) {
+    document.getElementById("text").value = savedTopic;
+  }
+};
+
+  </script>
+<!-- Firebase SDK (compat versions) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDy0I8E60PAIf7DnIv2-fu4eZK50OGHifM",
+    authDomain: "login-interview-b2d85.firebaseapp.com",
+    databaseURL: "https://login-interview-b2d85-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "login-interview-b2d85", 
+    storageBucket: "login-interview-b2d85.appspot.com",
+    messagingSenderId: "467565649214", 
+    appId: "1:467565649214:web:d4dee8fa95692320c6606f"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  // Initialize the Realtime Database instance
+  const db = firebase.database();
+  // Declare currentUser variable
+  let currentUser = null;
+
+  window.userSubscription = null;
+  firebase.auth().onAuthStateChanged((user) => {
+    // Set currentUser inside the auth state listener
+    currentUser = user;
+
+    if (user) {
+      console.log("User is logged in (quiz page):", user.uid);
+      const subscriptionRef = firebase.database().ref(`userProfiles/${user.uid}/subscription`);
+
+      subscriptionRef.once('value')
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            window.userSubscription = snapshot.val();
+            console.log("Subscription level (quiz page):", window.userSubscription);
+          } else {
+            window.userSubscription = 'free';
+            console.log("No specific subscription data found for user. Defaulting to free.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching subscription (quiz page):", error);
+          window.userSubscription = 'error_fetching'; // Indicate an error
+        });
+    } else {
+      console.log("No user is logged in (quiz page).");
+      window.userSubscription = 'logged_out'; 
+    }
+  });
+
+  window.checkFeatureAccess = (requiredLevel) => {
+    if (!window.userSubscription || window.userSubscription === 'logged_out' || window.userSubscription === 'error_fetching') {
+      alert("Please log in or check your connection to access features.");
+      return false;
+    }
+    if (window.userSubscription === 'premium') {
+      return true; 
+    }
+    if (requiredLevel === 'free' && window.userSubscription === 'free') {
+      return true; 
+    }
+    alert("This feature requires a Premium subscription!");
+    return false;
+  };
+
+  async function submitQuiz() {
+    let correct = 0;
+    let wrong = 0;
+    for(let i=0;i<10;i++){
+        if (answerMatch[i].toUpperCase() === useranswer[i].toUpperCase()) correct++;
+        else wrong++;
+    }
+
+    // Immediate alert for the final score
+    alert(`Quiz Complete! Your score: ${correct} out of 10!`);
+
+    console.log("Correct Answers:", correct);
+    console.log("Wrong Answers:", wrong);
+    console.log("🧠 Topic Name:", topic1);
+    const scoreRef = db.ref(`userProfiles/${currentUser.uid}/scores/quizscore/${topic1}`);
+    try {
+      const snapshot = await scoreRef.once('value');
+      const prevScore = snapshot.exists() ? snapshot.val().score : 0;
+
+      if (correct > prevScore) {
+        await scoreRef.set({ score: correct }); 
+        console.log("New high score saved!");
+      } else {
+        console.log("Current score not higher than previous high score.");
+      }
+    } catch (error) {
+      console.error("Error saving score to Firebase:", error);
+      // Optionally alert user or handle error gracefully if saving fails
+      alert("Could not save your score. Please check your login status or connection.");
+    }
+
+
+    document.getElementById("q10").style.display="none";
+    document.getElementById("chartPage").style.display = "block";
+    const ctx = document.getElementById('resultChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Correct', 'Wrong'],
+        datasets: [{
+          data: [correct, wrong],
+          backgroundColor: ['green', 'red']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { position: 'bottom' },
+          title: {
+            display: true,
+            text: 'Correct vs Wrong'
+          }
+        }
+      }
+    });
+  }
+
+
+  function showAnalysis() {
+    document.getElementById("chartPage").style.display = "none";
+    const page3 = document.getElementById("page3");
+    page3.style.display = "block";
+
+    // Apply background only during analysis
+    page3.classList.add("analysis-mode");
+
+    for (let i = 0; i < 10; i++) {
+      const options = ['A', 'B', 'C', 'D'];
+
+      for (let j = 0; j < 4; j++) {
+        const optionId = `q${i + 1}o${j + 1}`;
+        const optLetter = options[j];
+        const btn = document.getElementById(optionId);
+        if (!btn) continue;
+
+        btn.disabled = true;
+        btn.style.backgroundColor = "";
+
+        if (optLetter === useranswer[i] && useranswer[i] !== answerMatch[i]) {
+          btn.style.backgroundColor = "red";
+        }
+
+        if (optLetter === answerMatch[i]) {
+          btn.style.backgroundColor = "green";
+        }
+      }
+
+      const qDiv = document.getElementById(`q${i + 1}`);
+      qDiv.style.display = "block";
+      const nav = qDiv.querySelector(".next-fixed");
+      if (nav) nav.style.display = "none";
+    }
+  }
+
+</script>
+
+
+</body>
+</html>

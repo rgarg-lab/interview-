@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Community | MockInterview Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --success-color: #06d6a0;
+            --error-color: #ef476f;
+            --warning-color: #ffd166;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --black: #212529;
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --box-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-fast: all 0.15s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4895ef;
+            --primary-hover: #3a7bc8;
+            --bg-color: #121212;
+            --sidebar-bg: #1e1e1e;
+            --container-bg: #252525;
+            --text-color: #f8f9fa;
+            --text-muted: #adb5bd;
+            --input-bg: #2d2d2d;
+            --input-border: #3d3d3d;
+            --status-bg: #2d2d2d;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --box-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        [data-theme="blue"] {
+            --primary-color: #4cc9f0;
+            --primary-hover: #3ab0d4;
+            --bg-color: #1e1e4f;
+            --sidebar-bg: #2a2a6a;
+            --container-bg: #33337a;
+            --text-color: #f8f9fa;
+            --text-muted: #b8c1ec;
+            --input-bg: #3a3a7a;
+            --input-border: #4a4a8a;
+            --status-bg: #3a3a7a;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f5f7fa;
+            --sidebar-bg: #ffffff;
+            --container-bg: #ffffff;
+            --text-color: #212529;
+            --text-muted: #6c757d;
+            --input-bg: #ffffff;
+            --input-border: #ced4da;
+            --status-bg: #e9ecef;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            height: 100vh;
+            padding: 20px 0;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header i {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: var(--border-radius-sm);
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .sign-out-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition-fast);
+        }
+
+        .sign-out-btn:hover {
+            color: var(--error-color);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+            max-width: 1200px;
+        }
+
+        /* Community Header */
+        .community-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .community-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .community-title i {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-right: 15px;
+            background: linear-gradient(135deg, var(--primary-color), #4cc9f0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .community-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .community-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* New Post Section */
+        .new-post-section {
+            background-color: var(--container-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .new-post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .new-post-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .new-post-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .post-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius-sm);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 15px;
+            transition: var(--transition-fast);
+            resize: none;
+            min-height: 120px;
+            margin-bottom: 15px;
+        }
+
+        .post-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-tools {
+            display: flex;
+            gap: 10px;
+        }
+
+        .post-tool-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            transition: var(--transition-fast);
+            padding: 5px;
+        }
+
+        .post-tool-btn:hover {
+            color: var(--primary-color);
+        }
+
+        /* Posts List */
+        .posts-container {
+            margin-top: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .sort-btn {
+            background: var(--container-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius-sm);
+            padding: 8px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .sort-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .sort-btn:hover {
+            border-color: var(--primary-color);
+        }
+
+        /* Post Card */
+        .post-card {
+            background-color: var(--container-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition-fast);
+        }
+
+        .post-card:hover {
+            box-shadow: var(--box-shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .post-author {
+            flex: 1;
+        }
+
+        .post-author-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 3px;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .post-timestamp {
+            margin-right: 10px;
+        }
+
+        .post-topic {
+            background-color: var(--status-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .post-content {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--medium-gray);
+            padding-top: 15px;
+        }
+
+        .post-actions-left {
+            display: flex;
+            gap: 15px;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .post-action i {
+            margin-right: 5px;
+            font-size: 16px;
+        }
+
+        .post-action:hover {
+            color: var(--primary-color);
+        }
+
+        .post-action.liked {
+            color: var(--error-color);
+        }
+
+        .post-reply-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Reply Section */
+        .reply-section {
+            margin-top: 15px;
+            padding-left: 30px;
+            border-left: 3px solid var(--medium-gray);
+        }
+
+        .reply-card {
+            background-color: var(--container-bg);
+            border-radius: var(--border-radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .reply-form {
+            margin-top: 15px;
+            padding-left: 30px;
+        }
+
+        .reply-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius-sm);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 14px;
+            margin-bottom: 10px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* No Posts Message */
+        .no-posts {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            border: 1px dashed var(--input-border);
+            border-radius: var(--border-radius);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .btn-sm {
+            padding: 7px 12px;
+            font-size: 13px;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Auth Status */
+        .auth-status {
+            padding: 12px 15px;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .auth-success {
+            color: var(--success-color);
+            background-color: rgba(6, 214, 160, 0.1);
+            border: 1px solid rgba(6, 214, 160, 0.3);
+        }
+
+        .auth-error {
+            color: var(--error-color);
+            background-color: rgba(239, 71, 111, 0.1);
+            border: 1px solid rgba(239, 71, 111, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 240px;
+            }
+            .main-content {
+                margin-left: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                transition: var(--transition);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .community-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .post-actions-left {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-microphone-alt"></i>
+            <h1>MockInterview</h1>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="quiz/index.html" class="nav-link">
+                <i class="fas fa-question-circle"></i>
+                <span>Quiz</span>
+            </a>
+            <a href="fluency/index.html" class="nav-link">
+                <i class="fas fa-comment-dots"></i>
+                <span>Fluency</span>
+            </a>
+            <a href="coding/index.html" class="nav-link">
+                <i class="fas fa-code"></i>
+                <span>Coding</span>
+            </a>
+            <a href="community.html" class="nav-link active">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="topics.html" class="nav-link">
+                <i class="fas fa-book"></i>
+                <span>Topics</span>
+            </a>
+            <a href="progress.html" class="nav-link">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <img id="user-photo" src="https://via.placeholder.com/40" alt="User Photo">
+                <div class="user-details">
+                    <div id="user-display-name" class="user-name">Loading...</div>
+                    <div id="user-email" class="user-email">user@example.com</div>
+                </div>
+            </div>
+            <button id="sign-out-btn" class="sign-out-btn">Sign Out</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="community-header">
+            <div class="community-title">
+                <i class="fas fa-comments"></i>
+                <h1>Interview Community</h1>
+            </div>
+            <div class="community-actions">
+                <button class="btn btn-outline btn-sm" id="filter-btn">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <button class="btn btn-primary btn-sm" id="new-post-btn">
+                    <i class="fas fa-plus"></i> New Post
+                </button>
+            </div>
+        </div>
+
+        <div id="auth-status" class="auth-status hidden"></div>
+
+        <!-- New Post Section -->
+        <div class="new-post-section" id="new-post-section">
+            <div class="new-post-header">
+                <img id="post-user-photo" src="https://via.placeholder.com/40" alt="User Photo">
+                <h2>Create a Post</h2>
+            </div>
+            <textarea id="post-input" class="post-input" placeholder="Share your interview experiences, ask questions, or discuss topics..."></textarea>
+            <div class="post-actions">
+                <div class="post-tools">
+                    <button class="post-tool-btn" title="Add topic" id="add-topic-btn">
+                        <i class="fas fa-tag"></i>
+                    </button>
+                    <button class="post-tool-btn" title="Add code snippet" id="add-code-btn">
+                        <i class="fas fa-code"></i>
+                    </button>
+                    <button class="post-tool-btn" title="Add image" id="add-image-btn">
+                        <i class="fas fa-image"></i>
+                    </button>
+                </div>
+                <button id="send-post-btn" class="btn btn-primary" disabled>
+                    Post <span id="post-spinner" class="loading hidden"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Posts Container -->
+        <div class="posts-container">
+            <div class="section-header">
+                <h2>Recent Discussions</h2>
+                <div class="sort-options">
+                    <button class="sort-btn active" data-sort="timestamp">Newest</button>
+                    <button class="sort-btn" data-sort="likes">Top</button>
+                    <button class="sort-btn" data-sort="replies">Unanswered</button>
+                </div>
+            </div>
+
+            <div id="posts-list">
+                <div class="no-posts">
+                    <i class="fas fa-comments" style="font-size: 24px; margin-bottom: 10px;"></i>
+                    <p>No posts yet. Be the first to start a discussion!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { 
+            getDatabase, 
+            ref, 
+            push, 
+            set,
+            onChildAdded, 
+            onChildChanged,
+            onChildRemoved,
+            serverTimestamp, 
+            query, 
+            orderByChild, 
+            limitToLast,
+            update,
+            get
+        } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDy0I8E60PAIf7DnIv2-fu4eZK50OGHifM",
+            authDomain: "login-interview-b2d85.firebaseapp.com",
+            databaseURL: "https://login-interview-b2d85-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "login-interview-b2d85",
+            storageBucket: "login-interview-b2d85.appspot.com",
+            messagingSenderId: "467565649214",
+            appId: "1:467565649214:web:d4dee8fa95692320c6606f",
+            measurementId: "G-C87HTBE4FZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        // DOM Elements
+        const userPhotoElem = document.getElementById('user-photo');
+        const userDisplayNameElem = document.getElementById('user-display-name');
+        const userEmailElem = document.getElementById('user-email');
+        const signOutBtn = document.getElementById('sign-out-btn');
+        const postInput = document.getElementById('post-input');
+        const sendPostBtn = document.getElementById('send-post-btn');
+        const postsList = document.getElementById('posts-list');
+        const postSpinner = document.getElementById('post-spinner');
+        const authStatusElement = document.getElementById("auth-status");
+        const postUserPhoto = document.getElementById('post-user-photo');
+        const newPostBtn = document.getElementById('new-post-btn');
+        const newPostSection = document.getElementById('new-post-section');
+        const sortButtons = document.querySelectorAll('.sort-btn');
+        const filterBtn = document.getElementById('filter-btn');
+        const addTopicBtn = document.getElementById('add-topic-btn');
+
+        let currentUser = null;
+        let posts = {};
+        let currentSort = 'timestamp';
+
+        // Initialize the app
+        function initApp() {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // User is signed in
+                    currentUser = user;
+                    updateUserUI(user);
+                    sendPostBtn.disabled = false;
+                    postInput.disabled = false;
+                    showSuccess(`Welcome back, ${user.displayName || user.email.split('@')[0]}!`);
+                    
+                    // Load posts
+                    listenForPosts();
+                } else {
+                    // User is signed out
+                    currentUser = null;
+                    updateUserUI(null);
+                    sendPostBtn.disabled = true;
+                    postInput.disabled = true;
+                    showError("Please sign in to participate in the community.");
+                }
+            });
+        }
+
+        // Update user information in the UI
+        function updateUserUI(user) {
+            if (user) {
+                userDisplayNameElem.textContent = user.displayName || user.email.split('@')[0] || 'User';
+                userEmailElem.textContent = user.email || '';
+                userPhotoElem.src = user.photoURL || 'https://via.placeholder.com/40';
+                postUserPhoto.src = user.photoURL || 'https://via.placeholder.com/40';
+            } else {
+                userDisplayNameElem.textContent = 'Not Signed In';
+                userEmailElem.textContent = '';
+                userPhotoElem.src = 'https://via.placeholder.com/40';
+                postUserPhoto.src = 'https://via.placeholder.com/40';
+            }
+        }
+
+        // Sign out
+        signOutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                console.log('User signed out');
+            } catch (error) {
+                console.error('Sign out error:', error);
+                showError('Failed to sign out. Please try again.');
+            }
+        });
+
+        // Create new post
+        sendPostBtn.addEventListener('click', async () => {
+            const postContent = postInput.value.trim();
+            
+            if (!currentUser) {
+                showError('Please sign in to post.');
+                return;
+            }
+
+            if (postContent.length === 0) {
+                showError('Post cannot be empty!');
+                return;
+            }
+
+            try {
+                sendPostBtn.disabled = true;
+                postSpinner.classList.remove('hidden');
+
+                const postsRef = ref(db, 'posts');
+                const newPostRef = push(postsRef);
+                const postId = newPostRef.key;
+                
+                const postData = {
+                    id: postId,
+                    authorUid: currentUser.uid,
+                    authorName: currentUser.displayName || currentUser.email || 'Anonymous',
+                    authorPhoto: currentUser.photoURL || 'https://via.placeholder.com/40',
+                    content: postContent,
+                    timestamp: serverTimestamp(),
+                    likes: 0,
+                    likedBy: {},
+                    replies: 0,
+                    topic: 'General'
+                };
+
+                await set(newPostRef, postData);
+
+                postInput.value = '';
+                showSuccess('Your post was published!');
+            } catch (error) {
+                console.error('Error creating post:', error);
+                showError('Failed to create post: ' + error.message);
+            } finally {
+                sendPostBtn.disabled = false;
+                postSpinner.classList.add('hidden');
+            }
+        });
+
+        // Listen for posts
+        function listenForPosts() {
+            const postsRef = ref(db, 'posts');
+            const recentPostsQuery = query(postsRef, orderByChild(currentSort), limitToLast(50));
+
+            postsList.innerHTML = '<div class="no-posts"><i class="fas fa-spinner fa-spin"></i><p>Loading posts...</p></div>';
+
+            onChildAdded(recentPostsQuery, (snapshot) => {
+                const post = snapshot.val();
+                posts[post.id] = post;
+                renderPosts();
+            });
+
+            onChildChanged(recentPostsQuery, (snapshot) => {
+                const post = snapshot.val();
+                posts[post.id] = post;
+                renderPosts();
+            });
+
+            onChildRemoved(recentPostsQuery, (snapshot) => {
+                const post = snapshot.val();
+                delete posts[post.id];
+                renderPosts();
+            });
+        }
+
+        // Render posts based on current sort
+        function renderPosts() {
+            if (Object.keys(posts).length === 0) {
+                postsList.innerHTML = '<div class="no-posts"><i class="fas fa-comments"></i><p>No posts yet. Be the first to start a discussion!</p></div>';
+                return;
+            }
+
+            // Convert posts object to array and sort
+            let postsArray = Object.values(posts);
+            
+            switch(currentSort) {
+                case 'timestamp':
+                    postsArray.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    break;
+                case 'likes':
+                    postsArray.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+                    break;
+                case 'replies':
+                    postsArray.sort((a, b) => (a.replies || 0) - (b.replies || 0));
+                    break;
+            }
+
+            postsList.innerHTML = '';
+            postsArray.forEach(post => {
+                const postElement = createPostElement(post);
+                postsList.appendChild(postElement);
+            });
+        }
+
+        // Create post HTML element
+        function createPostElement(post) {
+            const timestamp = post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Just now';
+            const isLiked = currentUser && post.likedBy && post.likedBy[currentUser.uid];
+            
+            const postElement = document.createElement('div');
+            postElement.className = 'post-card';
+            postElement.dataset.postId = post.id;
+            postElement.innerHTML = `
+                <div class="post-header">
+                    <img src="${post.authorPhoto}" alt="Author" class="post-avatar">
+                    <div class="post-author">
+                        <div class="post-author-name">${post.authorName}</div>
+                        <div class="post-meta">
+                            <span class="post-timestamp">${timestamp}</span>
+                            <span class="post-topic">${post.topic || 'General'}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">${post.content}</div>
+                <div class="post-footer">
+                    <div class="post-actions-left">
+                        <div class="post-action ${isLiked ? 'liked' : ''}" onclick="handleLike('${post.id}')">
+                            <i class="${isLiked ? 'fas' : 'far'} fa-thumbs-up"></i>
+                            <span>${post.likes || 0}</span>
+                        </div>
+                        <div class="post-action" onclick="toggleReplies('${post.id}')">
+                            <i class="far fa-comment"></i>
+                            <span>${post.replies || 0}</span>
+                        </div>
+                    </div>
+                    <button class="post-reply-btn" onclick="showReplyForm('${post.id}')">Reply</button>
+                </div>
+                <div class="reply-section hidden" id="replies-${post.id}">
+                    <div class="replies-container" id="replies-container-${post.id}">
+                        <!-- Replies will be loaded here -->
+                    </div>
+                    <div class="reply-form hidden" id="reply-form-${post.id}">
+                        <textarea class="reply-input" placeholder="Write your reply..."></textarea>
+                        <button class="btn btn-primary btn-sm" onclick="submitReply('${post.id}')">Post Reply</button>
+                    </div>
+                </div>
+            `;
+
+            return postElement;
+        }
+
+        // Handle like action
+        window.handleLike = async function(postId) {
+            if (!currentUser) {
+                showError('Please sign in to like posts.');
+                return;
+            }
+
+            try {
+                const postRef = ref(db, `posts/${postId}`);
+                const postSnapshot = await get(postRef);
+                const post = postSnapshot.val();
+                
+                const updates = {};
+                const likedBy = post.likedBy || {};
+                const isLiked = likedBy[currentUser.uid];
+                
+                if (isLiked) {
+                    // Unlike
+                    updates[`/posts/${postId}/likes`] = (post.likes || 0) - 1;
+                    updates[`/posts/${postId}/likedBy/${currentUser.uid}`] = null;
+                } else {
+                    // Like
+                    updates[`/posts/${postId}/likes`] = (post.likes || 0) + 1;
+                    updates[`/posts/${postId}/likedBy/${currentUser.uid}`] = true;
+                }
+                
+                await update(ref(db), updates);
+            } catch (error) {
+                console.error('Error liking post:', error);
+                showError('Failed to like post. Please try again.');
+            }
+        };
+
+        // Toggle replies visibility
+        window.toggleReplies = function(postId) {
+            const repliesSection = document.getElementById(`replies-${postId}`);
+            repliesSection.classList.toggle('hidden');
+            
+            // Load replies if not already loaded
+            if (!repliesSection.classList.contains('hidden')) {
+                loadReplies(postId);
+            }
+        };
+
+        // Load replies for a post
+        async function loadReplies(postId) {
+            const repliesContainer = document.getElementById(`replies-container-${postId}`);
+            repliesContainer.innerHTML = '<p>Loading replies...</p>';
+            
+            try {
+                const repliesRef = ref(db, `replies/${postId}`);
+                const repliesSnapshot = await get(repliesRef);
+                
+                if (!repliesSnapshot.exists()) {
+                    repliesContainer.innerHTML = '<p>No replies yet.</p>';
+                    return;
+                }
+                
+                const replies = repliesSnapshot.val();
+                repliesContainer.innerHTML = '';
+                
+                Object.values(replies).forEach(reply => {
+                    const replyElement = createReplyElement(reply);
+                    repliesContainer.appendChild(replyElement);
+                });
+            } catch (error) {
+                console.error('Error loading replies:', error);
+                repliesContainer.innerHTML = '<p>Error loading replies.</p>';
+            }
+        }
+
+        // Create reply HTML element
+        function createReplyElement(reply) {
+            const timestamp = reply.timestamp ? new Date(reply.timestamp).toLocaleString() : 'Just now';
+            
+            const replyElement = document.createElement('div');
+            replyElement.className = 'reply-card';
+            replyElement.innerHTML = `
+                <div class="post-header">
+                    <img src="${reply.authorPhoto}" alt="Author" class="post-avatar">
+                    <div class="post-author">
+                        <div class="post-author-name">${reply.authorName}</div>
+                        <div class="post-meta">
+                            <span class="post-timestamp">${timestamp}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">${reply.content}</div>
+            `;
+
+            return replyElement;
+        }
+
+        // Show reply form
+        window.showReplyForm = function(postId) {
+            const replyForm = document.getElementById(`reply-form-${postId}`);
+            const repliesSection = document.getElementById(`replies-${postId}`);
+            
+            // Show replies section if hidden
+            if (repliesSection.classList.contains('hidden')) {
+                repliesSection.classList.remove('hidden');
+                loadReplies(postId);
+            }
+            
+            replyForm.classList.toggle('hidden');
+            if (!replyForm.classList.contains('hidden')) {
+                replyForm.querySelector('textarea').focus();
+            }
+        };
+
+        // Submit reply
+        window.submitReply = async function(postId) {
+            const replyForm = document.getElementById(`reply-form-${postId}`);
+            const replyInput = replyForm.querySelector('textarea');
+            const replyContent = replyInput.value.trim();
+            
+            if (!currentUser) {
+                showError('Please sign in to reply.');
+                return;
+            }
+
+            if (replyContent.length === 0) {
+                showError('Reply cannot be empty!');
+                return;
+            }
+
+            try {
+                const repliesRef = ref(db, `replies/${postId}`);
+                const newReplyRef = push(repliesRef);
+                
+                const replyData = {
+                    id: newReplyRef.key,
+                    postId: postId,
+                    authorUid: currentUser.uid,
+                    authorName: currentUser.displayName || currentUser.email || 'Anonymous',
+                    authorPhoto: currentUser.photoURL || 'https://via.placeholder.com/40',
+                    content: replyContent,
+                    timestamp: serverTimestamp()
+                };
+
+                await set(newReplyRef, replyData);
+                
+                // Update reply count on the post
+                const postRef = ref(db, `posts/${postId}`);
+                const postSnapshot = await get(postRef);
+                const post = postSnapshot.val();
+                
+                await update(ref(db), {
+                    [`/posts/${postId}/replies`]: (post.replies || 0) + 1
+                });
+
+                replyInput.value = '';
+                replyForm.classList.add('hidden');
+                showSuccess('Your reply was posted!');
+                loadReplies(postId);
+            } catch (error) {
+                console.error('Error submitting reply:', error);
+                showError('Failed to post reply. Please try again.');
+            }
+        };
+
+        // Sort posts
+        sortButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                sortButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                currentSort = button.dataset.sort;
+                renderPosts();
+            });
+        });
+
+        // Filter button
+        filterBtn.addEventListener('click', () => {
+            alert('Filter functionality would go here');
+        });
+
+        // Add topic button
+        addTopicBtn.addEventListener('click', () => {
+            const topic = prompt('Enter a topic for your post:');
+            if (topic) {
+                postInput.value = `[${topic}] ${postInput.value}`;
+            }
+        });
+
+        // Show status messages
+        function showError(message) {
+            authStatusElement.textContent = message;
+            authStatusElement.className = 'auth-status auth-error';
+            authStatusElement.classList.remove('hidden');
+            setTimeout(() => authStatusElement.classList.add('hidden'), 5000);
+        }
+
+        function showSuccess(message) {
+            authStatusElement.textContent = message;
+            authStatusElement.className = 'auth-status auth-success';
+            authStatusElement.classList.remove('hidden');
+            setTimeout(() => authStatusElement.classList.add('hidden'), 5000);
+        }
+
+        // Initialize the app
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

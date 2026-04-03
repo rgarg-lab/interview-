@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>3 Monaco Editors - Multi-language</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --editor-bg: #f4f4f4;
+      --button-bg: #4CAF50;
+      --button-text: #ffffff;
+    }
+
+    [data-theme="white"] {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --editor-bg: #f4f4f4;
+      --button-bg: #4CAF50;
+      --button-text: #ffffff;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --editor-bg: #1e1e1e;
+      --button-bg: #333;
+      --button-text: #fff;
+    }
+
+    [data-theme="blue"] {
+      --bg-color: linear-gradient(to right, #1e1e4f, #2b3b8e);
+      --text-color: #ffffff;
+      --editor-bg: #2b3b8e;
+      --button-bg: #1e88e5;
+      --button-text: #ffffff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      padding: 16px;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .editor-container {
+  margin-top: 50px; /* adds space below the fixed logo */
+  margin-bottom: 40px;
+}
+
+    .editor {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #ccc;
+      background-color: var(--editor-bg);
+    }
+
+    button {
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .editor-controls {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 40px;
+      gap: 15px;
+    }
+select {
+  padding: 10px 20px;        /* Match button size */
+  font-size: 16px;           /* Same font size as button */
+  border-radius: 6px;        /* Rounded corners like buttons */
+  border: 1px solid #ccc;
+  background-color: var(--editor-bg);
+  color: var(--text-color);
+}
+
+    pre {
+      background: #000;
+      color: #0f0;
+      padding: 10px;
+      min-height: 60px;
+      overflow-x: auto;
+    }
+
+    .theme-switcher {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 999;
+    }
+
+    .theme-switcher select {
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 6px;
+    }
+#logo-wrapper {
+  position: fixed; /* or absolute if you prefer */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+}
+
+#logo {
+  width: 90px;
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+
+#logo:hover {
+  transform: scale(1.05);
+}
+.page-wrapper {
+  padding-top: 100px; /* same spacing below logo for page1 */
+  text-align: center;
+}
+
+
+#page1 {
+  text-align: center;
+}
+
+  </style>
+</head>
+<body>
+<a href="/index.html" id="logo-wrapper">
+  <img src="/assets/image.png" alt="Mock Interview Logo" id="logo">
+</a>
+
+
+  <div class="theme-switcher">
+    <label for="themeSelect" style="font-weight: bold; margin-right: 5px;">Theme:</label>
+    <select id="themeSelect" onchange="setTheme(this.value)">
+      <option value="white">White</option>
+      <option value="dark">Dark</option>
+      <option value="blue">Blue</option>
+    </select>
+  </div>
+
+  <div class="page-wrapper">
+  <div id="page1">
+    <h2>🧠 Select Topic for Coding Interview</h2>
+    <select id="topics">
+      <option value="array" selected>Array</option>
+      <option value="dynamic program">Dynamic Program</option>
+      <option value="stack">Stack</option>
+      <option value="queue">Queue</option>
+      <option value="hash table">Hash Table</option>
+      <option value="math">Math</option>
+      <option value="sorting">Sorting</option>
+      <option value="two pointer">Two Pointer</option>
+      <option value="Backtracking">Backtracking</option>
+    </select>
+    <button id="next_page" onclick="next()">Next</button>
+  </div>
+</div>
+
+
+  <!-- Question 1 -->
+  <div class="editor-container" id="q_1" style="display: none;">
+    <h3>Question 1</h3>
+    <label for="lang1">Language:</label>
+    <select id="lang1">
+      <option value="cpp" selected>C++</option>
+      <option value="python">Python</option>
+      <option value="java">Java</option>
+      <option value="javascript">JavaScript</option>
+    </select>
+
+    <button onclick="runCode(1)">Run</button>
+    <div id="editor1" class="editor"></div>
+    <pre id="output1"></pre>
+
+    <div class="editor-controls">
+      <button onclick="next1()">Next</button>
+    </div>
+  </div>
+
+  <!-- Question 2 -->
+  <div class="editor-container" id="q_2" style="display: none;">
+    <h3>Question 2</h3>
+    <label for="lang2">Language:</label>
+    <select id="lang2">
+      <option value="cpp">C++</option>
+      <option value="python" selected>Python</option>
+      <option value="java">Java</option>
+      <option value="javascript">JavaScript</option>
+    </select>
+
+    <button onclick="runCode(2)">Run</button>
+    <div id="editor2" class="editor"></div>
+    <pre id="output2"></pre>
+
+    <div class="editor-controls">
+      <button onclick="prev2()">Prev</button>
+      <button onclick="next2()">Next</button>
+    </div>
+  </div>
+
+  <!-- Question 3 -->
+  <div class="editor-container" id="q_3" style="display: none;">
+    <h3>Question 3</h3>
+    <label for="lang3">Language:</label>
+    <select id="lang3">
+      <option value="cpp">C++</option>
+      <option value="python">Python</option>
+      <option value="java" selected>Java</option>
+      <option value="javascript">JavaScript</option>
+    </select>
+
+    <button onclick="runCode(3)">Run</button>
+    <div id="editor3" class="editor"></div>
+    <pre id="output3"></pre>
+
+    <div class="editor-controls">
+      <button onclick="prev3()">Prev</button>
+      <button onclick="next3()">Next</button>
+    </div>
+  </div>
+
+  <!-- Monaco Setup -->
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
+  <script>
+    let editor1, editor2, editor3;
+
+    const getDefaultCode = (lang) => {
+      switch (lang) {
+        case "cpp":
+          return `#include <iostream>\nusing namespace std;\n\nint main() {\n    return 0;\n}`;
+        case "python":
+          return `def main():\n    pass\n\nif __name__ == "__main__":\n    main()`;
+        case "java":
+          return `public class Main {\n    public static void main(String[] args) {\n        \n    }\n}`;
+        case "javascript":
+          return `function main() {\n    \n}\n\nmain();`;
+        default:
+          return "";
+      }
+    };
+
+    require.config({ paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs" } });
+
+    require(["vs/editor/editor.main"], function () {
+      editor1 = monaco.editor.create(document.getElementById("editor1"), {
+        value: getDefaultCode("cpp"),
+        language: "cpp",
+        theme: "vs-dark"
+      });
+
+      editor2 = monaco.editor.create(document.getElementById("editor2"), {
+        value: getDefaultCode("python"),
+        language: "python",
+        theme: "vs-dark"
+      });
+
+      editor3 = monaco.editor.create(document.getElementById("editor3"), {
+        value: getDefaultCode("java"),
+        language: "java",
+        theme: "vs-dark"
+      });
+
+      document.getElementById("lang1").addEventListener("change", function () {
+        const lang = this.value;
+        monaco.editor.setModelLanguage(editor1.getModel(), lang);
+        editor1.setValue(getDefaultCode(lang));
+      });
+
+      document.getElementById("lang2").addEventListener("change", function () {
+        const lang = this.value;
+        monaco.editor.setModelLanguage(editor2.getModel(), lang);
+        editor2.setValue(getDefaultCode(lang));
+      });
+
+      document.getElementById("lang3").addEventListener("change", function () {
+        const lang = this.value;
+        monaco.editor.setModelLanguage(editor3.getModel(), lang);
+        editor3.setValue(getDefaultCode(lang));
+      });
+    });
+
+    // 🌈 Theme persistence
+    const savedTheme = localStorage.getItem("theme") || "white";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    document.getElementById("themeSelect").value = savedTheme;
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    }
+  </script>
+
+  <script src="script.js"></script>
+  <script src="gemini.js"></script>
+</body>
+</html>

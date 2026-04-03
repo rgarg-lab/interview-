@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="white">
+<head>
+  <meta charset="UTF-8">
+  <title>Voice Interview</title>
+
+  <!-- STYLES -->
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --btn-bg: #01254b;
+      --btn-hover: #01264c;
+      --card-bg: #f5f5f5;
+    }
+
+    [data-theme="white"] {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --btn-bg: #01254b;
+      --btn-hover: #01264c;
+      --card-bg: #f5f5f5;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --btn-bg: #333;
+      --btn-hover: #555;
+      --card-bg: #1e1e1e;
+    }
+
+    [data-theme="blue"] {
+      --bg-color: #1e1e4f;
+      --text-color: #ffffff;
+      --btn-bg: #4c65dd;
+      --btn-hover: #728dff;
+      --card-bg: #2a2a6b;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    h1, h2 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .theme-switcher {
+      position: fixed;
+      top: 12px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .theme-switcher select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    #audio_page1 {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #audio_page1 input {
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      margin-top: 20px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    #audio_page1 input:focus {
+      border-color: var(--btn-bg);
+      box-shadow: 0 0 5px var(--btn-bg);
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px 5px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: var(--btn-bg);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--btn-hover);
+      transform: scale(1.05);
+    }
+
+    .question-section {
+      padding: 30px;
+      max-width: 600px;
+      margin: 40px auto;
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      display: none;
+    }
+
+    .status-msg {
+      color: #888;
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    audio {
+      margin-top: 10px;
+    }
+
+    #results_section > div {
+      padding: 30px;
+      max-width: 700px;
+      margin: 40px auto;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+      display: none;
+    }
+
+    #results_section p {
+      line-height: 1.5;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 600px) {
+      #audio_page1 input {
+        width: 80%;
+      }
+    }
+    #logo-wrapper {
+      position: fixed; /* or absolute if you prefer */
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      padding: 0;
+      margin: 0;
+    }
+
+    #logo {
+      width: 90px;
+      height: auto;
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+
+    #logo:hover {
+      transform: scale(1.05);
+    }
+  </style>
+
+  <!-- Firebase SDK (compat versions) - ABSOLUTELY REQUIRED IN THIS FILE -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <!-- Firebase Initialization for this page - REQUIRED -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDy0I8E60PAIf7DnIv2-fu4eZK50OGHifM",
+      authDomain: "login-interview-b2d85.firebaseapp.com",
+      databaseURL: "https://login-interview-b2d85-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "login-interview-b2d85",
+      storageBucket: "login-interview-b2d85.appspot.com",
+      messagingSenderId: "467565649214",
+      appId: "1:467565649214:web:d4dee8fa95692320c6606f"
+    };
+
+    // Initialize Firebase App for this page
+    // Using window.firebaseApp to avoid potential re-initialization issues if shared app exists
+    // but ensuring it's initialized if this page loads standalone.
+    // If you're ABSOLUTELY SURE Firebase is already initialized by the lister, you can try:
+    // try { window.firebaseApp = firebase.app(); } catch (e) { window.firebaseApp = firebase.initializeApp(firebaseConfig); }
+    window.firebaseApp = firebase.initializeApp(firebaseConfig);
+
+    // Initialize the Realtime Database instance and make it global for this page
+    window.db = firebase.database();
+
+    // Declare currentUser variable, making it global for this page
+    window.currentUser = null;
+
+    // Listen for auth state changes to set currentUser
+    firebase.auth().onAuthStateChanged((user) => {
+      window.currentUser = user; // Update the global currentUser when auth state changes
+      if (user) {
+        console.log("User logged in on Voice Interview page:", user.uid);
+        // If you need userSubscription here, you'd fetch it with window.db as well
+      } else {
+        console.log("No user logged in on Voice Interview page.");
+      }
+    });
+
+    // You might also want to expose window.userSubscription here if it's used elsewhere on this page
+    // window.userSubscription = 'logged_out'; // Or 'free' or fetch it from RTDB if needed
+  </script>
+</head>
+<body>
+<a href="/index.html" id="logo-wrapper">
+  <img src="/assets/image.png" alt="Mock Interview Logo" id="logo">
+</a>
+
+  <div class="theme-switcher">
+    <label for="themeSelect"><strong>Theme:</strong></label>
+    <select id="themeSelect" onchange="setTheme(this.value)">
+      <option value="white">White</option>
+      <option value="dark">Dark</option>
+      <option value="blue">Blue</option>
+    </select>
+  </div>
+
+  <!-- Page 1: Topic Input -->
+  <div id="audio_page1">
+    <h1>🎤 Welcome to the Voice Interview</h1>
+    <input type="text" id="audio_topic" placeholder="Enter your topic">
+    <button onclick="audio_page()">Next</button>
+  </div>
+
+  <!-- Question 1 -->
+  <div id="audio_question1" class="question-section">
+    <h2 id="audio_q1">Question 1 here</h2>
+    <button id="startBtn1" onclick="startrecording(0)">Start</button>
+    <button id="stopBtn1" onclick="stoprecording()">Stop</button>
+    <audio id="audio1" controls></audio>
+    <p id="statusMsg1" class="status-msg"></p>
+    <button id="nextBtn1" onclick="goToNext(1)">Next</button>
+  </div>
+
+  <!-- Question 2 -->
+  <div id="audio_question2" class="question-section">
+    <h2 id="audio_q2">Question 2 here</h2>
+    <button id="startBtn2" onclick="startrecording(1)">Start</button>
+    <button id="stopBtn2" onclick="stoprecording()">Stop</button>
+    <audio id="audio2" controls></audio>
+    <p id="statusMsg2" class="status-msg"></p>
+    <button id="nextBtn2" onclick="goToNext(2)">Next</button>
+  </div>
+
+  <!-- Question 3 -->
+  <div id="audio_question3" class="question-section">
+    <h2 id="audio_q3">Question 3 here</h2>
+    <button id="startBtn3" onclick="startrecording(2)">Start</button>
+    <button id="stopBtn3" onclick="stoprecording()">Stop</button>
+    <audio id="audio3" controls></audio>
+    <p id="statusMsg3" class="status-msg"></p>
+    <button id="nextBtn3" onclick="showSummary()">Submit</button>
+  </div>
+
+  <!-- Results Section -->
+  <section id="results_section">
+    <!-- Result 1 -->
+    <div id="result_page_1">
+      <h2>📘 Question 1 Summary</h2>
+      <p><strong>Question:</strong> <span id="q1_text"></span></p>
+      <p><strong>Transcript:</strong> <span id="a1_text"></span></p>
+      <p><strong>Fluency Pauses:</strong> <span id="f1_pauses"></span></p>
+      <audio id="audio1_result" controls></audio>
+      <p><strong>Feedback:</strong> <span id="f1_feedback"></span></p>
+      <p><strong>Score:</strong> <span id="s1_score"></span></p>
+      <button onclick="goToPage(2)">Next</button>
+    </div>
+
+    <!-- Result 2 -->
+    <div id="result_page_2">
+      <h2>📙 Question 2 Summary</h2>
+      <p><strong>Question:</strong> <span id="q2_text"></span></p>
+      <p><strong>Transcript:</strong> <span id="a2_text"></span></p>
+      <p><strong>Fluency Pauses:</strong> <span id="f2_pauses"></span></p>
+      <audio id="audio2_result" controls></audio>
+      <p><strong>Feedback:</strong> <span id="f2_feedback"></span></p>
+      <p><strong>Score:</strong> <span id="s2_score"></span></p>
+      <button onclick="goToPage(1)">Prev</button>
+      <button onclick="goToPage(3)">Next</button>
+    </div>
+
+    <!-- Result 3 -->
+    <div id="result_page_3">
+      <h2>📗 Question 3 Summary</h2>
+      <p><strong>Question:</strong> <span id="q3_text"></span></p>
+      <p><strong>Transcript:</strong> <span id="a3_text"></span></p>
+      <p><strong>Fluency Pauses:</strong> <span id="f3_pauses"></span></p>
+      <audio id="audio3_result" controls></audio>
+      <p><strong>Feedback:</strong> <span id="f3_feedback"></span></p>
+      <p><strong>Score:</strong> <span id="s3_score"></span></p>
+      <button onclick="goToPage(2)">Prev</button>
+    </div>
+  </section>
+
+  <!-- SCRIPTS -->
+  <script src="audio_script.js"></script>
+  <script src="audio_question_display.js"></script>
+
+  <!-- This is your inline fluency analysis code -->
+  <script>
+    let evaluations = [];
+    let fluency_score = 0;
+
+    async function showSummary() {
+      const response = await fetch('/fluency/generate-feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ audio_answers, audio_questions })
+      });
+      const data = await response.json();
+      evaluations = data.evaluations;
+      console.log("🎯 Full Gemini Feedback Response:", data.evaluations);
+      document.getElementById("audio_question3").style.display = "none";
+      showFinalResults();
+    }
+
+    async function showFinalResults() {
+      // Hide question section
+      document.getElementById("audio_question3").style.display = "none";
+
+      // Make sure all result pages exist before trying to show
+      const page1 = document.getElementById("result_page_1");
+      const page2 = document.getElementById("result_page_2");
+      const page3 = document.getElementById("result_page_3");
+
+      if (!page1 || !page2 || !page3) {
+        console.error("❌ One or more result page elements are missing in the DOM.");
+        return;
+      }
+
+      // Set content for each result page
+      for (let i = 0; i < 3; i++) {
+        document.getElementById(`q${i+1}_text`).innerText = audio_questions[i];
+        document.getElementById(`a${i+1}_text`).innerText = audio_answers[i];
+
+        const pauses = audio_fluency[i]?.map(p => `${p.before} → ${p.after} (${p.gap}ms)`).join(", ") || "None";
+        document.getElementById(`f${i+1}_pauses`).innerText = pauses;
+
+        // const audioURL = URL.createObjectURL(audioBlobs[i]);
+        // document.getElementById(`audio${i+1}_result`).src = audioURL;
+
+        document.getElementById(`f${i+1}_feedback`).innerText = evaluations[i].feedback;
+        document.getElementById(`s${i+1}_score`).innerText = evaluations[i].score;
+        // Parse only the first part before '/' as an integer
+        const scoreStr = evaluations[i].score.toString().split('/')[0];  // "01/10" → "01"
+        const score = parseInt(scoreStr);  // → 1
+        fluency_score += isNaN(score) ? 0 : score;
+        console.log(fluency_score);
+      }
+
+      // --- New code to save fluency score ---
+      // Now using window.currentUser and window.db
+      if (window.currentUser) { // Ensure a user is logged in
+        console.log("Saving fluency score for user:", window.currentUser.uid);
+        // We'll reuse 'topic1' for simplicity, assuming it's relevant to the fluency topic.
+        // If your fluency section covers a different topic, you might want to introduce
+        // a new variable like `fluencyTopic` instead of `topic1`.
+        const fluencyTopic = topic1; // Or a specific variable for fluency topic
+
+        const fluencyScoreRef = window.db.ref(`userProfiles/${window.currentUser.uid}/scores/fluentscore/${fluencyTopic}`);
+        try {
+          const snapshot = await fluencyScoreRef.once('value');
+          const prevFluencyScore = snapshot.exists() ? snapshot.val().score : 0;
+
+          if (fluency_score > prevFluencyScore) {
+            await fluencyScoreRef.set({ score: fluency_score });
+            console.log("New high fluency score saved!");
+          } else {
+            console.log("Current fluency score not higher than previous high fluency score.");
+          }
+        } catch (error) {
+          console.error("Error saving fluency score to Firebase:", error);
+          // Optionally alert user or handle error gracefully
+          alert("Could not save your fluency score. Please check your login status or connection.");
+        }
+      } else {
+        console.log("No user logged in, skipping fluency score save.");
+      }
+
+      // Show only the first result page initially
+      page1.style.display = "block";
+      page2.style.display = "none";
+      page3.style.display = "none";
+    }
+
+    function goToPage(pageNum) {
+      for (let i = 1; i <= 3; i++) {
+        const page = document.getElementById(`result_page_${i}`);
+        if (page) page.style.display = (i === pageNum) ? "block" : "none";
+      }
+    }
+  </script>
+
+  <!-- Theme setup and localStorage logic -->
+  <script>
+    window.onload = function () {
+      // Autofill topic if selected from topics.html
+      const selectedTopic = localStorage.getItem("selectedTopic");
+      if (selectedTopic) {
+        document.getElementById("audio_topic").value = selectedTopic;
+        // Optional: clear it after using
+        // localStorage.removeItem("selectedTopic");
+      }
+
+      // Theme setup
+      const savedTheme = localStorage.getItem('theme') || 'white';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.getElementById('themeSelect').value = savedTheme;
+    };
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+  </script>
+  <script>
+    let timeLeft = 30;
+    const timerDisplay = document.getElementById('timer');
+
+    const countdown = setInterval(() => {
+      timeLeft--;
+      timerDisplay.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        timerDisplay.textContent = "⏰ Time's up!";
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
